@@ -1,6 +1,10 @@
 *.pyc
 *.spec
 
+# src/mmdetection/balloon_dataset/
+src/mmdetection/checkpoints/
+src/mmdetection/tutorial_exps/
+
 __pycache__\
 
 # Byte-compiled / optimized / DLL files
