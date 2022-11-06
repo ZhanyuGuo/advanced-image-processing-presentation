@@ -21,7 +21,7 @@ class MRFSegmentation(Segmentation):
 
         # get image shape
         rows, cols = img.shape[0], img.shape[1]
-        predict_array = np.zeros([rows, cols], dtype=float)
+        predict_array = np.zeros([rows, cols], dtype=int)
 
         # pre-labeled
         pre_seg = self.pre_model_.segmentation(img)
@@ -67,7 +67,7 @@ class MRFSegmentation(Segmentation):
 
 
     '''
-    * @breif: Visulize the segement image
+    * @breif: Calculate energy
     * @param[in]: label ->  pixel's label in location `index`
     * @param[in]: index ->  target pixel's location, (x, y)
     * @param[in]: img   ->  source image(RGB or Gray)

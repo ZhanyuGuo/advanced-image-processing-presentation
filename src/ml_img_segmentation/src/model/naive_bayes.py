@@ -18,7 +18,7 @@ class NBSegmentation(Segmentation):
         channels = 0
         try:    rows, cols, channels = img.shape
         except: rows, cols = img.shape
-        predict_array = np.zeros([rows, cols], dtype=float)
+        predict_array = np.zeros([rows, cols], dtype=int)
 
         # travel all pixels
         for i in range(0, rows):

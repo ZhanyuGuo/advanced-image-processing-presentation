@@ -1,8 +1,6 @@
 from abc import ABC, abstractmethod
 import numpy as np
 import matplotlib.pyplot as plt
-import cv2 as cv
-from PIL import Image
 
 class Segmentation(ABC):
     def __init__(self, name: str) -> None:
@@ -15,28 +13,29 @@ class Segmentation(ABC):
         # model's name
         self.name = name
 
-
-    def train(self, label_path: str, src_path: str):
-        # source image
-        src = cv.imread(src_path, 1)
-        rgb = cv.cvtColor(src, cv.COLOR_BGR2RGB)
+    '''
+    * @breif: Train the segmentation parameters
+    * @param[in]: label_img ->  labeled image(RGB)
+    * @param[in]: src_img   ->  source image(RGB)
+    * @retval: None
+    '''
+    def train(self, label_img: np.ndarray, src_img: np.ndarray):
+        # get image's size
+        rows, cols = label_img.shape[0], label_img.shape[1]
 
         # count pixel color
-        with Image.open(label_path) as img:
-            width, height = img.size
-            labeled = img.convert('RGB')
-            color_count = {}
-            for x in range(width):
-                for y in range(height):
-                    pixel = labeled.getpixel((x, y))
-                    if pixel in color_count:
-                        color_count[pixel] = np.dstack((color_count[pixel], rgb[y, x, :]))
-                    else:
-                        color_count[pixel] = rgb[y, x, :]
+        color_count = {}
+        for x in range(rows):
+            for y in range(cols):
+                pixel = (label_img[x, y, 0], label_img[x, y, 1], label_img[x, y, 2])
+                if pixel in color_count:
+                    color_count[pixel] = np.dstack((color_count[pixel], src_img[x, y, :]))
+                else:
+                    color_count[pixel] = src_img[x, y, :]
 
         # initialize labels information
         for _, val in color_count.items():
-            pro = val.shape[2] / (width * height)
+            pro = val.shape[2] / (rows * cols)
             self.class_info.append([
                         [pro, np.mean(val[:, 0, :]), np.var(val[:, 0, :])],
                         [pro, np.mean(val[:, 1, :]), np.var(val[:, 1, :])],
@@ -48,7 +47,6 @@ class Segmentation(ABC):
 
         # trained finished
         self.trained_ = True
-
 
     @abstractmethod
     def segmentation(self, img: np.ndarray):
@@ -89,9 +87,31 @@ class Segmentation(ABC):
         return (1 / np.sqrt(2 * np.pi * var)) * np.exp(-((x - mean)**2) / (2 * var))
 
     @staticmethod
-    def fpr():
-        pass
+    def iou(label_img: np.ndarray, seg_img: np.ndarray, map_dict: dict) -> float:
+        # get image's size
+        rows, cols = label_img.shape[0], label_img.shape[1]
+        
+        # count right prediction
+        pre_count = {} 
+        for label, pre in map_dict.items():
+            pre_count[str(label)] = 0
+            pre_count[str(pre)] = 0
+            pre_count[str(label) + str(pre)] = 0
+        
+        for x in range(rows):
+            for y in range(cols):
+                try:
+                    pre_count[str(label_img[x][y])] += 1
+                    pre_count[str(seg_img[x][y])] += 1
+                    if map_dict[label_img[x][y]] == seg_img[x][y]:
+                        pre_count[str(label_img[x][y]) + str(seg_img[x][y])] += 1
+                except:
+                    continue
+        
+        res = [pre_count[str(label) + str(pre)] / 
+               (pre_count[str(label)] + pre_count[str(pre)] - pre_count[str(label) + str(pre)])
+               for label, pre in map_dict.items()]
+               
+        return sum(res) / len(res)
 
-    @staticmethod
-    def iou():
-        pass
+
