@@ -10,7 +10,7 @@
     conda activate openmmlab
     ```
 
-2. Install [pytorch](pytorch.org/).
+2. Install [pytorch](https://pytorch.org/).
 
 3. Install openmmlab.
     ```bash
