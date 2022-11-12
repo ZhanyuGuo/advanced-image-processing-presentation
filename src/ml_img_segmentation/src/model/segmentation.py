@@ -36,10 +36,11 @@ class Segmentation(ABC):
                     )
                 else:
                     color_count[pixel] = src_img[x, y, :]
+                    # color_count[pixel] = np.dstack((src_img[x, y, :], src_img[x, y, :]))
 
         # initialize labels information
         for _, val in color_count.items():
-            pro = val.shape[2] / (rows * cols)
+            pro = val.shape[2] / (rows * cols)  # BUG: IndexError: tuple index out of range, (3, )[2] is wrong.
             self.class_info.append(
                 [
                     [pro, np.mean(val[:, 0, :]), np.var(val[:, 0, :])],
