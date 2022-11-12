@@ -2,7 +2,7 @@ import os
 import cv2
 import numpy as np
 from mmseg.apis import inference_segmentor, init_segmentor, show_result_pyplot
-from mmseg.core.evaluation import get_palette, mean_iou, get_classes
+from mmseg.core.evaluation import get_palette, mean_iou
 
 file_path = os.path.dirname(__file__)
 
@@ -28,7 +28,9 @@ model = init_segmentor(config, checkpoint, device=device)
 # use the segmentor to do inference
 # img = os.path.abspath(os.path.join(file_path, "../demo/demo.png"))
 # img = os.path.abspath(os.path.join(file_path, "../demo/lindau_000058_000019_leftImg8bit.png"))
-img = os.path.abspath(os.path.join(file_path, "../demo/lindau_000058_000019_leftImg8bit_resize.png"))
+# img = os.path.abspath(os.path.join(file_path, "../demo/lindau_000058_000019_leftImg8bit_resize.png"))
+# img = os.path.abspath(os.path.join(file_path, "../demo/zurich_000070_000019_leftImg8bit.png"))
+img = os.path.abspath(os.path.join(file_path, "../demo/zurich_000070_000019_leftImg8bit_resize.png"))
 # img = os.path.abspath(os.path.join(file_path, "../demo/img.png"))
 
 result = inference_segmentor(model, img)
@@ -47,31 +49,24 @@ show_result_pyplot(
     out_file=out_file,
 )
 
+# calculate iou
 result = result[0]
-# dct = {}
-# for row in result:
-#     for col in row:
-#         if col in dct.keys():
-#             dct[col] += 1
-#         else:
-#             dct[col] = 0
-
-# print(dct)
-
 # label_path = os.path.abspath(os.path.join(file_path, "../demo/lindau_000058_000019_label.png"))
-label_path = os.path.abspath(os.path.join(file_path, "../demo/lindau_000058_000019_label_resize.png"))
+# label_path = os.path.abspath(os.path.join(file_path, "../demo/lindau_000058_000019_label_resize.png"))
+# label_path = os.path.abspath(os.path.join(file_path, "../demo/zurich_000070_000019_label.png"))
+label_path = os.path.abspath(os.path.join(file_path, "../demo/zurich_000070_000019_label_resize.png"))
 num_classes = 19
 ignore_index = 255
 label = cv2.imread(label_path, cv2.IMREAD_GRAYSCALE)
 ret_metrics = mean_iou(result, label, num_classes, ignore_index, nan_to_num=0)
-print(ret_metrics['IoU'])
+# print(ret_metrics['IoU'])
 
-IoU_list = []
+IoUs = []
 for i in ret_metrics['IoU']:
     if i == 0:
         continue
 
-    IoU_list.append(i)
+    IoUs.append(i)
 
-mIoU = sum(IoU_list) / len(IoU_list)
-print(mIoU)
+mIoU = sum(IoUs) / len(IoUs)
+print("mIoU = ", mIoU)

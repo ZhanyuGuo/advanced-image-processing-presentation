@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-'''
+"""
 Author: 梁超 1466858359@qq.com
 Date: 2022-11-06 21:32:26
 LastEditors: 梁超 1466858359@qq.com
@@ -8,7 +8,7 @@ FilePath: \Machined:\CV\test\src\edge.py
 Description: 
 
 Copyright (c) 2022 by 梁超 1466858359@qq.com, All Rights Reserved. 
-'''
+"""
 
 import cv2 as cv
 import numpy as np
@@ -17,10 +17,9 @@ import os
 
 
 class edge_Segmentation:
-
     def __init__(self, path):
-        self.path = path + '/test_mini.jpg'
-
+        # self.path = path + '/test_mini.jpg'
+        self.path = path + "/lindau_000058_000019_leftImg8bit_resize.png"
 
     def edge_segment(self):
 
@@ -33,7 +32,7 @@ class edge_Segmentation:
         grayImage = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
 
         # 二值化
-        ret, binary = cv.threshold(grayImage, 0, 255, cv.THRESH_BINARY + cv.THRESH_OTSU) 
+        ret, binary = cv.threshold(grayImage, 0, 255, cv.THRESH_BINARY + cv.THRESH_OTSU)
 
         # Sobel算子
         x = cv.Sobel(grayImage, cv.CV_16S, 1, 0)  # 对x求一阶导
@@ -71,53 +70,74 @@ class edge_Segmentation:
         Prewitt = cv.addWeighted(absX, 0.5, absY, 0.5, 0)
 
         # 高斯拉普拉斯算子
-        gaussian = cv.GaussianBlur(grayImage, (3, 3), 0)  
-        dst = cv.Laplacian(gaussian, cv.CV_16S, ksize = 3)  
+        gaussian = cv.GaussianBlur(grayImage, (3, 3), 0)
+        dst = cv.Laplacian(gaussian, cv.CV_16S, ksize=3)
         LOG = cv.convertScaleAbs(dst)
 
         # Scharr算子
-        x = cv.Scharr(binary, cv.CV_32F, 1, 0) 
-        y = cv.Scharr(binary, cv.CV_32F, 0, 1) 
-        absX = cv.convertScaleAbs(x)       
+        x = cv.Scharr(binary, cv.CV_32F, 1, 0)
+        y = cv.Scharr(binary, cv.CV_32F, 0, 1)
+        absX = cv.convertScaleAbs(x)
         absY = cv.convertScaleAbs(y)
         Scharr = cv.addWeighted(absX, 0.5, absY, 0.5, 0)
 
         # 用来正常显示中文标签
-        plt.rcParams['font.sans-serif'] = ['SimHei']
+        plt.rcParams["font.sans-serif"] = ["SimHei"]
 
         # 显示图形
-        images = [rgbImg, binary, Sobel, Roberts, Laplacian, Canny, Prewitt, LOG, Scharr]
-        titles = ['origin', 'binary', 'Sobel', 'Roberts', 'Laplacian', 'Canny', 'Prewitt', 'LOG', 'Scharr']  
+        images = [
+            rgbImg,
+            binary,
+            Sobel,
+            Roberts,
+            Laplacian,
+            Canny,
+            Prewitt,
+            LOG,
+            Scharr,
+        ]
+        titles = [
+            "origin",
+            "binary",
+            "Sobel",
+            "Roberts",
+            "Laplacian",
+            "Canny",
+            "Prewitt",
+            "LOG",
+            "Scharr",
+        ]
         for i in range(9):
             plt.subplot(3, 3, i + 1)
-            plt.title(titles[i])  
+            plt.title(titles[i])
             if i == 0:
                 plt.imshow(images[i])
             else:
                 plt.imshow(images[i], plt.cm.gray)
-            plt.xticks([]),plt.yticks([]) 
-        plt.suptitle('fixed Edge')
+            plt.xticks([]), plt.yticks([])
+        plt.suptitle("fixed Edge")
         plt.show()
 
-
     def contour_segment(self):
-        #读取图像
-        img = cv.imread(self.path)
+        # 读取图像
+        img = cv.imread(os.path.abspath(os.path.join(__file__, self.path)))
 
-        #灰度化处理图像
+        # 灰度化处理图像
         grayImage = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
 
-        #阈值化处理
-        ret, binary = cv.threshold(grayImage, 0, 255, cv.THRESH_BINARY + cv.THRESH_OTSU) 
+        # 阈值化处理
+        ret, binary = cv.threshold(grayImage, 0, 255, cv.THRESH_BINARY + cv.THRESH_OTSU)
 
-        #边缘检测
-        contours, hierarchy = cv.findContours(binary, cv.RETR_TREE, cv.CHAIN_APPROX_SIMPLE) 
+        # 边缘检测
+        contours, hierarchy = cv.findContours(
+            binary, cv.RETR_TREE, cv.CHAIN_APPROX_SIMPLE
+        )
 
-        #轮廓绘制
+        # 轮廓绘制
         cv.drawContours(img, contours, -1, (0, 255, 0), 1)
 
-        #显示图像
-        cv.imshow('gray', binary)
-        cv.imshow('res', img)
+        # 显示图像
+        cv.imshow("gray", binary)
+        cv.imshow("res", img)
         cv.waitKey(0)
         cv.destroyAllWindows()

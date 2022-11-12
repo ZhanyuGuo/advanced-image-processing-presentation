@@ -40,7 +40,7 @@ class Segmentation(ABC):
 
         # initialize labels information
         for _, val in color_count.items():
-            pro = val.shape[2] / (rows * cols)  # BUG: IndexError: tuple index out of range, (3, )[2] is wrong.
+            pro = val.shape[2] / (rows * cols)
             self.class_info.append(
                 [
                     [pro, np.mean(val[:, 0, :]), np.var(val[:, 0, :])],
@@ -74,12 +74,14 @@ class Segmentation(ABC):
 
         # Initial Image
         ax1.set_title("Initial Image")
-        ax1.imshow(img, cmap="gray")
+        # ax1.imshow(img, cmap="gray")
+        ax1.imshow(img)
 
         # Segmentation Image
         seg_img = self.segmentation(img)
         ax2.set_title(self.name + " Image")
-        ax2.imshow(seg_img, cmap="gray")
+        # ax2.imshow(seg_img, cmap="gray")
+        ax2.imshow(seg_img)
 
         plt.show()
 

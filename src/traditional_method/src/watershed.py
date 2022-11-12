@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-'''
+"""
 Author: 梁超 1466858359@qq.com
 Date: 2022-11-08 19:07:26
 LastEditors: 梁超 1466858359@qq.com
@@ -8,7 +8,7 @@ FilePath: \Machined:\CV\test\src\watershed.py
 Description: 
 
 Copyright (c) 2022 by 梁超 1466858359@qq.com, All Rights Reserved. 
-'''
+"""
 
 import cv2 as cv
 import numpy as np
@@ -17,15 +17,13 @@ import os
 
 
 class watershed_Segmentation:
-    
     def __init__(self, path):
         self.path = path
 
-
     def watershed_segment(self):
-        
+
         # 读取原始图像
-        path = self.path + '/coin.png'
+        path = self.path + "/coin.png"
         img = cv.imread(os.path.abspath(os.path.join(__file__, path)))
 
         # 图像灰度化处理
@@ -36,11 +34,11 @@ class watershed_Segmentation:
 
         # 图像开运算消除噪声
         kernel = np.ones((3, 3), np.uint8)
-        opening = cv.morphologyEx(thresh, cv.MORPH_OPEN, kernel, iterations = 2)
+        opening = cv.morphologyEx(thresh, cv.MORPH_OPEN, kernel, iterations=2)
 
         # 图像膨胀操作确定背景区域
-        sure_bg = cv.dilate(opening, kernel, iterations = 3)
- 
+        sure_bg = cv.dilate(opening, kernel, iterations=3)
+
         # 距离运算确定前景区域
         dist_transform = cv.distanceTransform(opening, cv.DIST_L2, 5)
         ret, sure_fg = cv.threshold(dist_transform, 0.7 * dist_transform.max(), 255, 0)
@@ -58,19 +56,19 @@ class watershed_Segmentation:
         # 用0标记未知区域
         markers[unknown == 255] = 0
 
-        #分水岭算法实现图像分割
+        # 分水岭算法实现图像分割
         markers = cv.watershed(img, markers)
-        img[markers == -1] = [255,0,0]
+        img[markers == -1] = [255, 0, 0]
 
-        #用来正常显示中文标签
-        plt.rcParams['font.sans-serif'] = ['SimHei']
+        # 用来正常显示中文标签
+        plt.rcParams["font.sans-serif"] = ["SimHei"]
 
-        #显示图像
-        titles = [u'标记区域', u'图像分割']  
-        images = [markers, img]  
-        for i in range(2):  
+        # 显示图像
+        titles = ["标记区域", "图像分割"]
+        images = [markers, img]
+        for i in range(2):
             plt.subplot(1, 2, i + 1)
-            plt.imshow(images[i], 'gray')  
-            plt.title(titles[i])  
-            plt.xticks([]), plt.yticks([])  
+            plt.imshow(images[i], "gray")
+            plt.title(titles[i])
+            plt.xticks([]), plt.yticks([])
         plt.show()
