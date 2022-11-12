@@ -6,7 +6,7 @@
 
 1. Create conda environment.
     ```bash
-    conda create -n openmmlab python=3.7
+    conda create -n openmmlab python=3.8
     conda activate openmmlab
     ```
 
@@ -72,7 +72,7 @@
 
 1. Create conda environment.
     ```bash
-    conda create -n openmmlab python=3.7
+    conda create -n openmmlab python=3.8
     conda activate openmmlab
     ```
 

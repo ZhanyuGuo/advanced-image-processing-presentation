@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 '''
 Author: 梁超 1466858359@qq.com
 Date: 2022-11-06 21:32:26
@@ -18,7 +19,7 @@ import os
 class edge_Segmentation:
 
     def __init__(self, path):
-        self.path = path + '/test.jpg'
+        self.path = path + '/test_mini.jpg'
 
 
     def edge_segment(self):
