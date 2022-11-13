@@ -34,10 +34,10 @@ def main():
     colorful = False
     file_path = os.path.dirname(__file__)
     json_path = os.path.abspath(
-        os.path.join(file_path, "../demo/lindau_000058_000019_gtFine_polygons.json")
+        os.path.join(file_path, "../assets/weimar_000046_000019_gtFine_polygons.json")
     )
     save_path = os.path.abspath(
-        os.path.join(file_path, "../demo/lindau_000058_000019_label_resize.png")
+        os.path.join(file_path, "../assets/weimar_000046_000019_label_resize.png")
     )
 
     data = json.load(open(json_path))

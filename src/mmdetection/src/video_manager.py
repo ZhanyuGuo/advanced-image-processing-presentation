@@ -1,10 +1,8 @@
+import shutil
 import mmcv
 import numpy
 import numpy as np
 from mmdet.apis import inference_detector, init_detector, show_result_pyplot
-
-# import matplotlib
-# matplotlib.use("TkAgg")
 
 
 def imgHandler(img, result, score_thr=0.8):
@@ -39,12 +37,7 @@ checkpoint = "checkpoints/epoch_12.pth"
 device = "cuda"
 model = init_detector(config, checkpoint, device=device)
 
-# video = mmcv.VideoReader('video/test_video.mp4')
-# img = video.read()
-# result = inference_detector(model, img)
-# show_result_pyplot(model, img, result, score_thr=0.8)
-
-video = mmcv.VideoReader("demo/test_video.mp4")
+video = mmcv.VideoReader("assets/test_video.mp4")
 i = 0
 while True:
     img = video.read()
@@ -53,8 +46,10 @@ while True:
 
     result = inference_detector(model, img)
     rlt = imgHandler(img, result)
-    mmcv.imwrite(rlt, "demo/results/%06d.jpg" % i)
+    mmcv.imwrite(rlt, "assets/results/%06d.jpg" % i)
     print(str(i) + f"/{video.frame_cnt}")
     i += 1
 
-mmcv.frames2video("demo/results", "demo/result.mp4", fourcc="mp4v")
+mmcv.frames2video("assets/results", "assets/result.mp4", fourcc="mp4v")
+
+shutil.rmtree("assets/results")

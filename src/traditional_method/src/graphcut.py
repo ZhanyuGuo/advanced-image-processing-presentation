@@ -137,7 +137,7 @@ class graph_Segmentation:
         # flows, cuts = maximum_flow(cutGraph, source, sink)
 
         # 将有向图对应生成带标签的实际图像
-        res = zeros(m * n)
+        # res = zeros(m * n)
         # for pos,label in list(cuts.items())[:-2]: #don't add source/sink
         #     res[pos] = label
 

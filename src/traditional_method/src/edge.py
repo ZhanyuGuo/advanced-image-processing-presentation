@@ -18,8 +18,8 @@ import os
 
 class edge_Segmentation:
     def __init__(self, path):
-        # self.path = path + '/test_mini.jpg'
-        self.path = path + "/lindau_000058_000019_leftImg8bit_resize.png"
+        self.path = path + '/test_mini.jpg'
+        # self.path = path + "/lindau_000058_000019_leftImg8bit_resize.png"
 
     def edge_segment(self):
 
@@ -82,7 +82,7 @@ class edge_Segmentation:
         Scharr = cv.addWeighted(absX, 0.5, absY, 0.5, 0)
 
         # 用来正常显示中文标签
-        plt.rcParams["font.sans-serif"] = ["SimHei"]
+        # plt.rcParams["font.sans-serif"] = ["SimHei"]
 
         # 显示图形
         images = [

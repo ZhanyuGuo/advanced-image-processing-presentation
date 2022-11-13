@@ -40,7 +40,7 @@
     python src/image_demo.py
     ```
 
-3. Then there will be a window and the image will be saved in `demo/`.
+3. Then there will be a window and the image will be saved in `assets/`.
 
 ## Balloon Dataset - MMDetection
 
@@ -54,19 +54,19 @@
     ```bash
     python src/train_balloon.py
     ```
-    The model will be saved in `checkpoint/`.
+    The model will be saved in `checkpoints/`.
 
 3. Inference.
     ```bash
     python src/image_demo_balloon.py
     ```
-    The result will be saved in `demo/`.
+    The result will be saved in `assets/`.
 
 4. Make video.
     ```bash
     python src/video_manager.py
     ```
-    The result will be saved in `demo/`.
+    The result will be saved in `assets/`.
 
 ## INSTALL - MMSegmentation
 
@@ -105,4 +105,4 @@
     python src/image_demo.py
     ```
 
-3. Then there will be a window and the image will be saved in `demo/`.
+3. Then there will be a window and the image will be saved in `assets/`.

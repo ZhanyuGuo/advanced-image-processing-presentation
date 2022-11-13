@@ -19,8 +19,8 @@ import os
 
 class thresh_Segmentation:
     def __init__(self, path):
-        # self.path = path + "/dog.png"
-        self.path = path + "/lindau_000058_000019_leftImg8bit_resize.png"
+        self.path = path + "/dog.png"
+        # self.path = path + "/lindau_000058_000019_leftImg8bit_resize.png"
 
     # imshow
     def show(self, thresh):
